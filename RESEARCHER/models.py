@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
 
 
 class Researche(db.Model):
-    id = db.Column(db.Integer, primary_key=True)    
+    id = db.Column(db.Integer, primary_key=True) 
+
     def __repr__(self):
-        return f"{self.id}
+        return f"{self.id}"

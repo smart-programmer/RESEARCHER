@@ -1,14 +1,11 @@
 from flask import Flask, request, redirect, render_template, url_for, make_response
 from RESEARCHER import app, db, bcrypt
-from RESEARCHER.forms import LoginForm, UploadProduct, UserForm, SimpleForm
+from RESEARCHER.forms import LoginForm, PostResearch, UserForm, SimpleForm
 # from RESEARCHER import errors
-from RESEARCHER.models import Product, User
+from RESEARCHER.models import Researche, User
 from RESEARCHER.utils import save_image
 from flask_login import current_user, login_user, login_required, logout_user
 
-
-
-# /// 5air
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -18,28 +15,18 @@ def home():
 @app.route('/products/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-    product_form = UploadProduct()
+    research_form = PostResearch()
     
-    if product_form.validate_on_submit():
-        product_name = product_form.name.data
-        description = product_form.description.data
-        price = product_form.price.data
-        period = product_form.period.data
-       
-        image_name = save_image(product_form.image.data, "static/posts/images")
-
-        product = Product(image_name=image_name, name=product_name, description=description,
-        price=price, user_id=None, owner_id=current_user.id, period=period)
-
-        db.session.add(product)
+    if research_form.validate_on_submit():
+        research = Research()
+        db.session.add(research)
         db.session.commit()
 
-        return redirect(url_for('products'))
+        return redirect(url_for('researchs'))
+    return render_template('post_researche.html', form=research_form)
 
-    return render_template('upload_product.html', form=product_form)
 
-
-@app.route('/products', methods=['GET'])
+@app.route('/researchs', methods=['GET'])
 @login_required
 def products():
 
