@@ -1,0 +1,17 @@
+{% extends "layouts/layout.html" %} {% block content %}
+{% for product in products%}
+<article class="media content-section ">
+    <img class="rounded article-img" src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <h2>{{ product.name }}</h2>
+            <small class="text-muted">{{ product.post_date.strftime('%Y-%m-%d') }} - ({{ product.price }} ريال /
+                {{ product.period }}) </small>
+        </div>
+        <h2><a class="article-title">{{ product.description }} </a></h2>
+        <br>
+        <a href="{{ url_for('product', id=product.id) }}" class="btn btn-success float-right">المزيد</a>
+    </div>
+</article>
+{% endfor %}
+{% endblock content%}

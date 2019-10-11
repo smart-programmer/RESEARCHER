@@ -1,0 +1,105 @@
+{% extends "layouts/layout.html" %} {% block content %}
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading">{{ user.full_name }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading">الطلبات</h2>
+        </div>
+    </div>
+    <div class="row">
+
+        {% for product in products %}
+        {% if product.user_id %}
+        <article class="media content-section Requests" style="width: 100%">
+            <img class="rounded-circle article-img " src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2">{{product.name}}</a>
+                    <small class="text-muted">{{ product.post_date.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <h2><a class="article-title"
+                        href="{{ url_for('product', id=product.id) }}">{{ product.title }}</a></h2>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#acceptModal">
+                    وافق
+                </button><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#declineModal">
+                    ارفض
+                </button>
+            </div>
+        </article>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading">عروضي</h2>
+        </div>
+    </div>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-6">
+            <div class="card" style="margin: 1%;">
+                    <img class="img-fluid"
+                    src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <a href="{{ url_for('product', id=product.id) }}" class="btn btn-success">اذهب لصفحة المنتج</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">هل تريد الموافقة على الطلب؟</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لا</button>
+                <a href="{{ url_for('home') }}" type="button" class="btn btn-success">نعم</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="declineModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">هل تريد رفض الطلب؟</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">لا</button>
+                <a href="{{ url_for('home') }}" type="button" class="btn btn-danger">نعم</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

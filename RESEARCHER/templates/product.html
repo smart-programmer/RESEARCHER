@@ -1,0 +1,41 @@
+{% extends "layouts/layout.html" %} {% block content %}
+<article class="media content-section">
+    <div class="d-block">
+        <img class="rounded article-img img-fluid" src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}">
+    </div>
+    <br>
+    <div class="media-body d-block">
+        <div class="article-metadata">
+            <a class="mr-2" href="#"></a>
+            <small class="text-muted">{{ product.post_date.strftime('%Y-%m-%d') }}   -   ({{ product.price }} ريال / {{ product.period }})   </small>
+        </div>
+        <h2><a class="article-title" >{{ product.name }} </a></h2>
+        <p class="article-content">{{ product.description }}</p>
+        <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.button1(class="btn btn-success float-right", value="اطلب") }}
+                </div>
+            </form>
+    </div>
+</article>
+
+<!-- 
+<article class="media content-section">
+        <div class="col-lg-10 mx-auto">
+                <img class="img-fluid  article-img d-block" src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}" alt="">
+        <div class="article-metadata">
+        <h1 class="mr-2">{{ product.name }}</h1>
+        <p class="lead">
+          by
+          <a href="#">Start Bootstrap</a>
+        </p>
+        <hr>
+        <p>Posted on {{ product.post_date.strftime('%Y-%m-%d') }}</p>
+        </div>
+        
+        <p class="lead">{{ product.description }}</p>
+        </div>
+</article> -->
+
+{% endblock content%}

@@ -1,0 +1,7 @@
+{% extends "layouts/layout.html" %} {% block content %}
+<div class="content-section">
+    <h1>{{ heading }} - ({{ error }})</h1>
+    <p>{{ paragraph }}</p>
+    <a class="btn btn-dark" href="{{ url_for('home') }}">Home Page</a>
+</div>
+{% endblock content %}
