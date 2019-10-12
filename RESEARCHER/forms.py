@@ -5,9 +5,11 @@ from wtforms_components import SelectField
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.widgets import TextArea
 
-options = [("للساعة", "للساعة"), ("لليوم", "يوميا"),
-           ("للاسبوع", "اسبوعيا"), ("للشهر", "للشهر")]
-user_type_list = [("باحث", "باحث"), ("طالب", "طالب")]
+grade_select = [("elementarySchool", "الابتدائية"), ("middleSchool", "المتوسطة"),
+           ("highSchool", "الثانوية"), ("all","الكل")]
+province_select = [("Makkah", "منطقة مكة المكرمة"), ("Riyadh", "منطقة الرياض"), ("all", "الكل")]
+level_select =[("excellent", "ممتاز"), ("medium", "متوسط"), ("low", "منخفظ"), ("all", "الكل")]
+
 
 
 class MessageForm(FlaskForm):
@@ -31,8 +33,15 @@ class LoginForm(FlaskForm):
 class PostResearch(FlaskForm):
     name = wtforms.StringField("اسم البحث", validators=[
         DataRequired(), length(min=3, max=255)])
-    description = wtforms.StringField("وصف البحث", validators=[
+    research_subject = wtforms.StringField("وصف البحث", validators=[
         DataRequired(), length(min=3, max=255)], widget=TextArea())
+    survey_link = wtforms.StringField("رابط الاستبيان", validators=[DataRequired(), length(max=255)])
+    grade = wtforms.SelectField(
+        "السنة", choices=grade_select, validators=[DataRequired()])
+    province = wtforms.SelectField(
+        "منطقة البحث", choices=province_select, validators=[DataRequired()])
+    level = wtforms.SelectField(
+        "مستوى الطلاب", choices=level_select, validators=[DataRequired()])
     submit = wtforms.SubmitField("اعرض")
 
 
@@ -41,8 +50,10 @@ class UserForm(FlaskForm):
         "name", validators=[length(max=255), DataRequired()])
     password = wtforms.StringField("password", validators=[length(min=3)])
     submit = wtforms.SubmitField("سجل")
-    user_type = wtforms.SelectField(
-        "النوع", choices=user_type_list, validators=[DataRequired()])
+
+class SchoolLoginForm(FlaskForm):
+    name = wtforms.StringField("اسم المدرسة")
+    password = wtforms.StringField("الرقم السري")
 
 
 class SimpleForm(FlaskForm):

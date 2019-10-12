@@ -1,9 +1,9 @@
 from flask import Flask, request, redirect, render_template, url_for, make_response
 from RESEARCHER import app, db, bcrypt
-from RESEARCHER.forms import LoginForm, PostResearch, UserForm, SimpleForm
+from RESEARCHER.forms import LoginForm, PostResearch, UserForm, SimpleForm, SchoolLoginForm
 # from RESEARCHER import errors
-from RESEARCHER.models import Researche, User
-from RESEARCHER.utils import save_image
+from RESEARCHER.models import Research, User, School
+# from RESEARCHER.utils import save_image
 from flask_login import current_user, login_user, login_required, logout_user
 
 
@@ -12,44 +12,61 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/products/upload', methods=['GET', 'POST'])
+@app.route('/research/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
     research_form = PostResearch()
     
     if research_form.validate_on_submit():
-        research = Research()
+        name = research_form.name.data
+        survey_link = research_form.survey_link.data
+        research_subject = research_form.research_subject.data
+        grade = research_form.grade.data
+        province = research_form.province.data
+        level = research_form.level.data
+    
+        research = Research(owner=current_user, research_subject=research_subject, survey_link=survey_link,
+        grade=grade, province=province, level=level, name=name)
         db.session.add(research)
         db.session.commit()
 
-        return redirect(url_for('researchs'))
-    return render_template('post_researche.html', form=research_form)
+        if research.province == "all":
+            schools = School.query.all()
+        else:
+            schools = School.query.filter_by(province=research.province)
+
+        for school in schools:
+            school.researches.append(research)
 
 
-@app.route('/researchs', methods=['GET'])
-@login_required
-def products():
-
-    products = Product.query.all()
+        return redirect(url_for('home'))
+    return render_template('post_research.html', form=research_form)
 
 
-    image_path = url_for("static", filename="posts/images")
+# @app.route('/researchs', methods=['GET'])
+# @login_required
+# def products():
 
-    return render_template('products.html', image_path=image_path, products=products)
+#     products = Product.query.all()
 
 
-@app.route("/products/product/<id>", methods=["GET", "POST"])
-@login_required
-def product(id):
-    product = Product.query.get(id)
+#     image_path = url_for("static", filename="posts/images")
 
-    form = SimpleForm()
+#     return render_template('products.html', image_path=image_path, products=products)
 
-    if form.validate_on_submit():
-        product.user_id = current_user.id
-        db.session.commit()
 
-    return render_template("product.html", product=product, form=form)
+# @app.route("/products/product/<id>", methods=["GET", "POST"])
+# @login_required
+# def product(id):
+#     product = Product.query.get(id)
+
+#     form = SimpleForm()
+
+#     if form.validate_on_submit():
+#         product.user_id = current_user.id
+#         db.session.commit()
+
+#     return render_template("product.html", product=product, form=form)
 
 
 
@@ -95,18 +112,45 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for("profile"))
+        return redirect(url_for("login"))
     return render_template('register.html', form=user_form)  
 
-@app.route('/packages', methods=['GET', 'POST'])
-def packages():
-    return render_template('packages.html')
+
 
 @app.route("/profile", methods=["GET"])
 @login_required
 def profile():
-    products = Product.query.filter_by(owner_id=current_user.id)
-    return render_template("profile.html", user=current_user, products=products)
+    researches = Research.query.filter_by(owner=current_user.id)
+    return render_template("profile.html", user=current_user, researches=researches)
 
 
+@app.route("/school_login")
+def school_login():
+    school_login_form = SchoolLoginForm()
+    if school_login_form.validate_on_submit():
+        name = school_login_form.name.data
+        password = school_login_form.password.data
+        school = School.query.filter_by(name=name).first()
 
+        if school:
+            if school.password == password:
+                return redirect(url_for("school_profile", name=name))
+            else:
+                return redirect(url_for("school_login"))
+        else:
+            return redirect(url_for("home"))
+                
+    return render_template("school_login.html", form=school_login_form)
+
+@app.route("/school_profile/<name>")
+def school_profile(name):
+    # اعرض الابحاث الموجهة لهذي المدارس وحط زر قبول بحث وهمي واشياء اضافية زي رابط يودي لصفحة البحث ومعلوماته كلها
+    school = School.query.filter_by(name=name).first()
+    return render_template("school_profile.html", school=school)
+
+
+@app.route("/research/<id>")
+def research(id):
+    # الصفحة اللي حتروه لها المدرية اذا ضغطت على رابط بحث
+    research = Research.query.get(id)
+    return render_template("research.html", research=research)
