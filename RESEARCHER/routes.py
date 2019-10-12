@@ -9,7 +9,8 @@ from flask_login import current_user, login_user, login_required, logout_user
 # done
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html')
+    schools = School.query.all()
+    return render_template('index.html', schools=schools)
 
 # Working 
 @app.route('/research/upload', methods=['GET', 'POST'])
@@ -27,22 +28,24 @@ def upload():
 
         school = School.query.all()
         if len(school) > 0:
-            if not (research.province == "all"):
-                school = School.query.filter_by(province=research.province).first()
+            if not (province == "all"):
+                school = School.query.filter_by(province=province).first()
+                if school:
+                    research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
+                    grade=grade, province=province, level=level, name=name, school=school.id)
+                else:
+                    school = None
+            else:
+                school = School.query.all[0]
+                research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
+                grade=grade, province=province, level=level, name=name, school=school.id)
         else:
-            return redirect(url_for("home"))
-        
-        
-
-
+           school = None
         
         research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
-        grade=grade, province=province, level=level, name=name, school=school.id)
+        grade=grade, province=province, level=level, name=name, school=school)
         db.session.add(research)
         db.session.commit()
-
-
-        
 
 
         return redirect(url_for('home'))
@@ -74,8 +77,7 @@ def upload():
 
 #     return render_template("product.html", product=product, form=form)
 
-
-
+# Done 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -97,6 +99,7 @@ def login():
             return redirect(url_for("login"))
     return render_template('login.html', form=form)
 
+# Done 
 @app.route("/logout")
 @login_required
 def logout():
@@ -104,7 +107,7 @@ def logout():
     return redirect(url_for("home"))
 
 
-
+# Done
 @app.route('/register', methods=["GET", "POST"])
 def register():
     user_form = UserForm()
@@ -119,30 +122,32 @@ def register():
         db.session.commit()
 
         return redirect(url_for("login"))
-    return render_template('register.html', form=user_form)  
+    return render_template('register_user.html', form=user_form)  
 
 
-
+# Done 
 @app.route("/profile", methods=["GET"])
 @login_required
 def profile():
     researches = Research.query.filter_by(owner=current_user.id)
     return render_template("profile.html", user=current_user, researches=researches)
 
-
-@app.route("/school_register")
+# Done 
+@app.route("/school_register", methods=["GET", "POST"])
 def school_register():
     school_form = schoolForm()
     if school_form.validate_on_submit():
         name = school_form.name.data
         password = school_form.password.data
+        province = school_form.province.data
 
-        school = School(name=name, password=password)
+        school = School(name=name, password=password, province=province)
         db.session.add(school)
-        db.sessio.commit()
+        db.session.commit()
     return render_template("school_register.html", form=school_form)
 
-@app.route("/school_login")
+# Done 
+@app.route("/school_login", methods=["GET", "POST"])
 def school_login():
     school_login_form = SchoolLoginForm()
     if school_login_form.validate_on_submit():
@@ -160,6 +165,7 @@ def school_login():
                 
     return render_template("school_login.html", form=school_login_form)
 
+
 @app.route("/school_profile/<name>")
 def school_profile(name):
     # اعرض الابحاث الموجهة لهذي المدارس وحط زر قبول بحث وهمي واشياء اضافية زي رابط يودي لصفحة البحث ومعلوماته كلها
@@ -171,4 +177,5 @@ def school_profile(name):
 def research(id):
     # الصفحة اللي حتروه لها المدرية اذا ضغطت على رابط بحث
     research = Research.query.get(id)
-    return render_template("research.html", research=research)
+    owner = User.query.get(research.owner)
+    return render_template("research.html", research=research, owner=owner)

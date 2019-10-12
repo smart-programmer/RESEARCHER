@@ -26,7 +26,7 @@ class MessageForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     full_name = wtforms.StringField("اسم المستخدم")
-    password = wtforms.StringField("الرقم السري")
+    password = wtforms.PasswordField("الرقم السري")
     submit = wtforms.SubmitField("تسجيل الدخول")
 
 
@@ -48,16 +48,20 @@ class PostResearch(FlaskForm):
 class UserForm(FlaskForm):
     full_name = wtforms.StringField(
         "name", validators=[length(max=255), DataRequired()])
-    password = wtforms.StringField("password", validators=[length(min=3)])
+    password = wtforms.PasswordField("password", validators=[length(min=3)])
     submit = wtforms.SubmitField("سجل")
 
 class SchoolLoginForm(FlaskForm):
     name = wtforms.StringField("اسم المدرسة")
-    password = wtforms.StringField("الرقم السري")
+    password = wtforms.PasswordField("الرقم السري")
+    submit = wtforms.SubmitField("سجل دخول")
 
 class schoolForm(FlaskForm):
     name = wtforms.StringField("اسم المدرسة")
-    password = wtforms.StringField("الرقم السري")
+    password = wtforms.PasswordField("الرقم السري")
+    province = wtforms.SelectField(
+        "المنطقة ", choices=province_select, validators=[DataRequired()])
+    submit = wtforms.SubmitField("سجل")
 
 
 class SimpleForm(FlaskForm):

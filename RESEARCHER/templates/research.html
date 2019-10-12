@@ -1,41 +1,18 @@
 {% extends "layouts/layout.html" %} {% block content %}
-<article class="media content-section">
-    <div class="d-block">
-        <img class="rounded article-img img-fluid" src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}">
-    </div>
-    <br>
-    <div class="media-body d-block">
-        <div class="article-metadata">
-            <a class="mr-2" href="#"></a>
-            <small class="text-muted">{{ product.post_date.strftime('%Y-%m-%d') }}   -   ({{ product.price }} ريال / {{ product.period }})   </small>
+<article class="media content-section text-center">
+    <div class="card border-primary mb-3" style="width: 100%;">
+        <div class="card-header">عنون البحث : {{ research.name }}</div>
+        <div class="card-body text-primary">
+            <h5 class="card-title"> للباحث : {{ owner.full_name }}</h5>
+            <p class="card-text"> فكرة البحث : {{ research.research_subject }}</p>
+            <ul class="list-group">
+                <li class="list-group-item"> موجه لطلاب المرحلة :  {{ research.grade }}</li>
+                <li class="list-group-item"> في منطقة :  {{ research.province }}</li>
+                <li class="list-group-item"> مستوى الطلاب فوق: :  {{ research.level }}</li>
+            </ul>
+            <a href="{{ ''.join(['http://', research.survey_link]) }}" class="btn btn-primary float-right">أجري
+                الإستبيان</a>
         </div>
-        <h2><a class="article-title" >{{ product.name }} </a></h2>
-        <p class="article-content">{{ product.description }}</p>
-        <form method="POST" action="">
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.button1(class="btn btn-success float-right", value="اطلب") }}
-                </div>
-            </form>
     </div>
 </article>
-
-<!-- 
-<article class="media content-section">
-        <div class="col-lg-10 mx-auto">
-                <img class="img-fluid  article-img d-block" src="{{ url_for('static', filename= 'posts/images/' + product.image_name) }}" alt="">
-        <div class="article-metadata">
-        <h1 class="mr-2">{{ product.name }}</h1>
-        <p class="lead">
-          by
-          <a href="#">Start Bootstrap</a>
-        </p>
-        <hr>
-        <p>Posted on {{ product.post_date.strftime('%Y-%m-%d') }}</p>
-        </div>
-        
-        <p class="lead">{{ product.description }}</p>
-        </div>
-</article> -->
-
 {% endblock content%}

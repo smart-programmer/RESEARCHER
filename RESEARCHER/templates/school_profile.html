@@ -1,0 +1,34 @@
+{% extends "layouts/layout.html" %} {% block content %}
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+    <h2 class="account-heading">{{ school }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="content-section">
+    <div class="media">
+        <div class="media-body">
+            <h2 class="account-heading text-center">الأبحاث المتاحة</h2>
+        </div>
+    </div>
+    <div class="row">
+        {% for research in school.researches %}
+            <div class="card text-center mt-3"  style="width: 100%;">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ research.name }}</h5>
+                    <p class="card-text">{{ research.research_subject }}</p>
+                    <a href='{{ url_for("research", id=research.id) }}' class="btn btn-primary">المزيد</a>
+                </div>
+                <div class="card-footer text-muted">
+                    2 days ago
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

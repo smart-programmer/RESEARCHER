@@ -45,5 +45,8 @@ class School(db.Model):
     password = db.Column(db.String(255), nullable=False)
     province = db.Column(db.String(255), nullable=False)
     researches = db.relationship('Research', lazy='dynamic')
-    
+
+    def __repr__(self):
+        return f"{self.name}"
+
 

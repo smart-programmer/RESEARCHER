@@ -1,22 +1,35 @@
 <header class="site-header">
-    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/" style="font-size: 2rem;">وسيط <span><img style="width: 50px;" src="{{ url_for('static', filename= 'images/main-icon.png') }}" alt=""></span></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
+            <a class="navbar-brand mr-4" href="/" style="font-size: 2rem;">باحث <span><img style="width: 50px;"
+                        src="{{ url_for('static', filename= 'images/main-icon.png') }}" alt=""></span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation"> <span
+                    class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
-                    
+
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                        <a class="nav-item nav-link" href="{{ url_for('home') }}">الرئيسية</a>
-                        {% if not products %}<a class="nav-item nav-link" href="#">المنتجات</a>{% endif %}
-                        <a class="nav-item nav-link" href="#">ارفع منتج</a>
-                        <a class="nav-item nav-link" href="#">الملف الشخصي</a>
+                    <a class="nav-item nav-link" href="{{ url_for('home') }}">الرئيسية</a>
                     {% if current_user.is_authenticated: %}
-                    
-                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">سجل خروج</a>{% else %}
+                    <a class="nav-item nav-link" href="{{ url_for('logout') }}">سجل خروج</a>
+                    {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            سجل
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('register') }}">سجل كباحث</a>
+                            <a class="dropdown-item" href="{{ url_for('school_register') }}">سجل كمدرسة</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url_for('login') }}">سجل دخول كباحث</a>
+                            <a class="dropdown-item" href="{{ url_for('school_login') }}">سجل دخول  كمدرسة</a>
+                        </div>
+                    </li>
                     {% endif %}
                 </div>
             </div>
