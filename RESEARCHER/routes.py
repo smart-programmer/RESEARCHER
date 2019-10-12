@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect, render_template, url_for, make_response
 from RESEARCHER import app, db, bcrypt
-from RESEARCHER.forms import LoginForm, PostResearch, UserForm, SimpleForm, SchoolLoginForm
+from RESEARCHER.forms import LoginForm, PostResearch, UserForm, SimpleForm, SchoolLoginForm, schoolForm
 # from RESEARCHER import errors
 from RESEARCHER.models import Research, User, School
 # from RESEARCHER.utils import save_image
@@ -24,19 +24,25 @@ def upload():
         grade = research_form.grade.data
         province = research_form.province.data
         level = research_form.level.data
-    
-        research = Research(owner=current_user, research_subject=research_subject, survey_link=survey_link,
-        grade=grade, province=province, level=level, name=name)
+
+        school = School.query.all()
+        if len(school) > 0:
+            if not (research.province == "all"):
+                school = School.query.filter_by(province=research.province).first()
+        else:
+            return redirect(url_for("home"))
+        
+        
+
+
+        
+        research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
+        grade=grade, province=province, level=level, name=name, school=school.id)
         db.session.add(research)
         db.session.commit()
 
-        if research.province == "all":
-            schools = School.query.all()
-        else:
-            schools = School.query.filter_by(province=research.province)
 
-        for school in schools:
-            school.researches.append(research)
+        
 
 
         return redirect(url_for('home'))
@@ -123,6 +129,18 @@ def profile():
     researches = Research.query.filter_by(owner=current_user.id)
     return render_template("profile.html", user=current_user, researches=researches)
 
+
+@app.route("/school_register")
+def school_register():
+    school_form = schoolForm()
+    if school_form.validate_on_submit():
+        name = school_form.name.data
+        password = school_form.password.data
+
+        school = School(name=name, password=password)
+        db.session.add(school)
+        db.sessio.commit()
+    return render_template("school_register.html", form=school_form)
 
 @app.route("/school_login")
 def school_login():

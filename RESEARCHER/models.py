@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(500), nullable=False)
-    researches = db.relationship('Research', backref="research", lazy='dynamic')
+    researches = db.relationship('Research', lazy='dynamic')
     
     def __repr__(self):
         return f"{self.full_name}"
@@ -35,7 +35,6 @@ class Research(db.Model):
     province = db.Column(db.String(255), nullable=False)
     level = db.Column(db.String(50), nullable=False)
     school = db.Column(db.Integer, db.ForeignKey('school.id'))
-    
 
     def __repr__(self):
         return f"{self.id}"
@@ -45,6 +44,6 @@ class School(db.Model):
     name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     province = db.Column(db.String(255), nullable=False)
-    researches = db.relationship('Research', backref="research", lazy='dynamic')
+    researches = db.relationship('Research', lazy='dynamic')
     
 

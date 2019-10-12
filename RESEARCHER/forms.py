@@ -55,6 +55,10 @@ class SchoolLoginForm(FlaskForm):
     name = wtforms.StringField("اسم المدرسة")
     password = wtforms.StringField("الرقم السري")
 
+class schoolForm(FlaskForm):
+    name = wtforms.StringField("اسم المدرسة")
+    password = wtforms.StringField("الرقم السري")
+
 
 class SimpleForm(FlaskForm):
     button1 = wtforms.SubmitField("button1")
