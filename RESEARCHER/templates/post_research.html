@@ -1,6 +1,6 @@
 {% extends "layouts/layout.html" %} {% block content %}
 <div class="content-section">
-    <form method="POST" action="" enctype="multipart/form-data">
+    <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">{{ legend }}</legend>
@@ -14,38 +14,50 @@
                 {% else %} {{ form.name(class="form-control form-control-lg") }} {% endif %}
             </div>
             <div class="form-group">
-                {{ form.description.label(class="form-control-label") }} {% if form.description.errors %}
-                {{ form.description(class="form-control form-control-lg is-invalid") }}
+                {{ form.research_subject.label(class="form-control-label") }} {% if form.research_subject.errors %}
+                {{ form.research_subject(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
-                    {% for error in form.description.errors %}
+                    {% for error in form.research_subject.errors %}
                     <span>{{ error }}</span> {% endfor %}
                 </div>
-                {% else %} {{ form.description(class="form-control form-control-lg") }} {% endif %}
+                {% else %} {{ form.research_subject(class="form-control form-control-lg") }} {% endif %}
             </div>
             <div class="form-group">
-                {{ form.price.label(class="form-control-label") }} {% if form.price.errors %}
-                {{ form.price(class="form-control form-control-lg is-invalid") }}
+                {{ form.survey_link.label(class="form-control-label") }} {% if form.survey_link.errors %}
+                {{ form.survey_link(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
-                    {% for error in form.price.errors %}
+                    {% for error in form.survey_link.errors %}
                     <span>{{ error }}</span> {% endfor %}
                 </div>
-                {% else %} {{ form.price(class="form-control form-control-lg") }} {% endif %}
+                {% else %} {{ form.survey_link(class="form-control form-control-lg") }} {% endif %}
             </div>
             <div class="form-group">
-                    {{ form.period.label(class="form-control-label") }} {% if form.period.errors %}
-                    {{ form.period(class="form-control form-control-lg is-invalid") }}
+                    {{ form.grade.label(class="form-control-label") }} {% if form.grade.errors %}
+                    {{ form.grade(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
-                        {% for error in form.period.errors %}
+                        {% for error in form.grade.errors %}
                         <span>{{ error }}</span> {% endfor %}
                     </div>
-                    {% else %} {{ form.period(class="form-control form-control-lg") }} {% endif %}
+                    {% else %} {{ form.grade(class="form-control form-control-lg") }} {% endif %}
                 </div>
-            <div class="form-group">
-                {{ form.image.label() }} {{ form.image(class="form-control-file") }} {% if form.image.errors %}
-                {% for error in form.image.errors %}
-                <span class="text-danger">{{ error }}</span></br>
-                {% endfor %} {% endif %}
-            </div>
+                <div class="form-group">
+                    {{ form.province.label(class="form-control-label") }} {% if form.province.errors %}
+                    {{ form.province(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.province.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                    {% else %} {{ form.province(class="form-control form-control-lg") }} {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.level.label(class="form-control-label") }} {% if form.level.errors %}
+                    {{ form.level(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.level.errors %}
+                        <span>{{ error }}</span> {% endfor %}
+                    </div>
+                    {% else %} {{ form.level(class="form-control form-control-lg") }} {% endif %}
+                </div>
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-success") }}

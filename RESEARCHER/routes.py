@@ -6,12 +6,12 @@ from RESEARCHER.models import Research, User, School
 # from RESEARCHER.utils import save_image
 from flask_login import current_user, login_user, login_required, logout_user
 
-
+# done
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('index.html')
 
-
+# Working 
 @app.route('/research/upload', methods=['GET', 'POST'])
 @login_required
 def upload():

@@ -1,6 +1,7 @@
 from RESEARCHER import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 
 
@@ -33,6 +34,8 @@ class Research(db.Model):
     grade = db.Column(db.String(255), nullable=False) 
     province = db.Column(db.String(255), nullable=False)
     level = db.Column(db.String(50), nullable=False)
+    school = db.Column(db.Integer, db.ForeignKey('school.id'))
+    
 
     def __repr__(self):
         return f"{self.id}"
@@ -42,6 +45,6 @@ class School(db.Model):
     name = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     province = db.Column(db.String(255), nullable=False)
-    researches = db.relationship("Research",
-                    secondary=association_table)
+    researches = db.relationship('Research', backref="research", lazy='dynamic')
+    
 
