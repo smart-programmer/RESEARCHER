@@ -166,7 +166,8 @@ def school_login():
     return render_template("school_login.html", form=school_login_form)
 
 
-@app.route("/school_profile/<name>")
+@app.route("/school_profile/<str:name>")
+@login_required
 def school_profile(name):
     # اعرض الابحاث الموجهة لهذي المدارس وحط زر قبول بحث وهمي واشياء اضافية زي رابط يودي لصفحة البحث ومعلوماته كلها
     school = School.query.filter_by(name=name).first()
