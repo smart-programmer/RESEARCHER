@@ -26,24 +26,9 @@ def upload():
         province = research_form.province.data
         level = research_form.level.data
 
-        school = School.query.all()
-        if len(school) > 0:
-            if not (province == "all"):
-                school = School.query.filter_by(province=province).first()
-                if school:
-                    research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
-                    grade=grade, province=province, level=level, name=name, school=school.id)
-                else:
-                    school = None
-            else:
-                school = School.query.all[0]
-                research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
-                grade=grade, province=province, level=level, name=name, school=school.id)
-        else:
-           school = None
         
         research = Research(owner=current_user.id, research_subject=research_subject, survey_link=survey_link,
-        grade=grade, province=province, level=level, name=name, school=school)
+        grade=grade, province=province, level=level, name=name)
         db.session.add(research)
         db.session.commit()
 
@@ -141,9 +126,10 @@ def school_register():
         password = school_form.password.data
         province = school_form.province.data
 
-        school = School(name=name, password=password, province=province)
+        school = School(name=name, password=password, provinceS=province)
         db.session.add(school)
         db.session.commit()
+        return redirect(url_for("school_login"))
     return render_template("school_register.html", form=school_form)
 
 # Done 
@@ -166,7 +152,7 @@ def school_login():
     return render_template("school_login.html", form=school_login_form)
 
 
-@app.route("/school_profile/<str:name>")
+@app.route("/school_profile/<name>")
 @login_required
 def school_profile(name):
     # اعرض الابحاث الموجهة لهذي المدارس وحط زر قبول بحث وهمي واشياء اضافية زي رابط يودي لصفحة البحث ومعلوماته كلها
